@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PARINAAM CLOCK</title>
+<title>PARINAAM Countdown</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 
@@ -61,7 +61,7 @@ align-items:flex-start;
 gap:40px;
 }
 
-/* EACH BLOCK */
+/* NUMBER BLOCK */
 
 .block{
 display:flex;
@@ -69,27 +69,21 @@ flex-direction:column;
 align-items:center;
 }
 
-/* NUMBER */
-
 .number{
 font-size:120px;
 line-height:1;
 }
-
-/* COLON */
-
-.colon{
-font-size:120px;
-padding-top:10px;
-}
-
-/* LABEL */
 
 .label{
 font-size:28px;
 margin-top:10px;
 letter-spacing:4px;
 opacity:0.85;
+}
+
+.colon{
+font-size:120px;
+padding-top:10px;
 }
 
 </style>
@@ -141,29 +135,30 @@ opacity:0.85;
 
 </div>
 
+<!-- TICK SOUND -->
+
+<audio id="tickSound" src="tick.mp3" preload="auto"></audio>
+
 <script>
 
 /* TARGET DATE */
 
 var target=new Date("Feb 20, 2026 21:00:00").getTime();
 
-/* FORMAT FUNCTION */
+/* PAD FUNCTION */
 
 function pad(n){
 return n.toString().padStart(2,'0');
 }
 
-/* UPDATE TIMER */
+/* COUNTDOWN */
 
 setInterval(function(){
 
 var now=new Date().getTime();
-
 var diff=target-now;
 
-if(diff<0){
-return;
-}
+if(diff<0) return;
 
 var days=Math.floor(diff/(1000*60*60*24));
 var hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
@@ -175,6 +170,20 @@ document.getElementById("hours").innerHTML=pad(hours);
 document.getElementById("minutes").innerHTML=pad(minutes);
 document.getElementById("seconds").innerHTML=pad(seconds);
 
+},1000);
+
+
+/* TICK SOUND */
+
+var tick=document.getElementById("tickSound");
+
+document.body.addEventListener("click", function(){
+tick.play();
+});
+
+setInterval(function(){
+tick.currentTime=0;
+tick.play();
 },1000);
 
 </script>
