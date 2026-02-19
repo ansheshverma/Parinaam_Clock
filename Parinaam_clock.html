@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PARINAAM CLOCK</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+overflow:hidden;
+background:black;
+font-family:'Bebas Neue', sans-serif;
+color:white;
+}
+
+/* VIDEO BACKGROUND */
+
+.video-bg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+filter:brightness(0.4);
+}
+
+/* DARK OVERLAY */
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+z-index:-1;
+}
+
+/* LOGO */
+
+.logo{
+position:absolute;
+top:80px;
+left:50%;
+transform:translateX(-50%);
+width:600px;
+}
+
+/* TIMER CONTAINER */
+
+.timer{
+position:absolute;
+top:300px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+align-items:flex-start;
+gap:40px;
+}
+
+/* EACH BLOCK */
+
+.block{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* NUMBER */
+
+.number{
+font-size:120px;
+line-height:1;
+}
+
+/* COLON */
+
+.colon{
+font-size:120px;
+padding-top:10px;
+}
+
+/* LABEL */
+
+.label{
+font-size:28px;
+margin-top:10px;
+letter-spacing:4px;
+opacity:0.85;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND VIDEO -->
+
+<video autoplay muted loop playsinline class="video-bg">
+<source src="background.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- LOGO -->
+
+<img src="logo.png" class="logo">
+
+<!-- TIMER -->
+
+<div class="timer">
+
+<div class="block">
+<div class="number" id="days">00</div>
+<div class="label">DAYS</div>
+</div>
+
+<div class="colon">:</div>
+
+<div class="block">
+<div class="number" id="hours">00</div>
+<div class="label">HOURS</div>
+</div>
+
+<div class="colon">:</div>
+
+<div class="block">
+<div class="number" id="minutes">00</div>
+<div class="label">MINUTES</div>
+</div>
+
+<div class="colon">:</div>
+
+<div class="block">
+<div class="number" id="seconds">00</div>
+<div class="label">SECONDS</div>
+</div>
+
+</div>
+
+<script>
+
+/* TARGET DATE */
+
+var target=new Date("Feb 20, 2026 21:00:00").getTime();
+
+/* FORMAT FUNCTION */
+
+function pad(n){
+return n.toString().padStart(2,'0');
+}
+
+/* UPDATE TIMER */
+
+setInterval(function(){
+
+var now=new Date().getTime();
+
+var diff=target-now;
+
+if(diff<0){
+return;
+}
+
+var days=Math.floor(diff/(1000*60*60*24));
+var hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+var minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+var seconds=Math.floor((diff%(1000*60))/1000);
+
+document.getElementById("days").innerHTML=pad(days);
+document.getElementById("hours").innerHTML=pad(hours);
+document.getElementById("minutes").innerHTML=pad(minutes);
+document.getElementById("seconds").innerHTML=pad(seconds);
+
+},1000);
+
+</script>
+
+</body>
+</html>
