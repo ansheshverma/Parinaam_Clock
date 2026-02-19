@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PARINAAM CLOCK</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+<style>
+
+/* BODY */
+
+body{
+margin:0;
+overflow:hidden;
+font-family:'Bebas Neue', sans-serif;
+background:black;
+color:white;
+}
+
+/* VIDEO BACKGROUND */
+
+.video-bg{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-3;
+filter:brightness(0.35) contrast(1.3);
+}
+
+/* DARK OVERLAY */
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+z-index:-2;
+}
+
+/* LOGO */
+
+.logo{
+position:absolute;
+top:40px;
+left:50%;
+transform:translateX(-50%);
+width:220px;
+animation:fadeIn 3s ease;
+}
+
+/* TITLE */
+
+.title{
+text-align:center;
+font-size:65px;
+letter-spacing:12px;
+margin-top:200px;
+animation:fadeIn 3s ease;
+}
+
+/* CLOCK */
+
+.clock{
+text-align:center;
+font-size:120px;
+letter-spacing:10px;
+margin-top:20px;
+text-shadow:0 0 20px red;
+animation:pulse 1s infinite alternate;
+}
+
+/* LABELS */
+
+.labels{
+text-align:center;
+font-size:22px;
+letter-spacing:6px;
+opacity:0.8;
+}
+
+/* PARTICLES */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeIn{
+0%{opacity:0;}
+100%{opacity:1;}
+}
+
+@keyframes pulse{
+0%{text-shadow:0 0 10px red;}
+100%{text-shadow:0 0 40px red;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO BACKGROUND -->
+
+<video autoplay muted loop playsinline class="video-bg">
+<source src="background.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<!-- LOGO -->
+
+<img src="logo.png" class="logo">
+
+<!-- TITLE -->
+
+<div class="title">PARINAAM IS COMING</div>
+
+<!-- CLOCK -->
+
+<div class="clock" id="clock">00:00:00:00:00</div>
+
+<div class="labels">
+ DAYS HOURS MINUTES SECONDS
+</div>
+
+<!-- PARTICLES -->
+
+<canvas id="particles"></canvas>
+
+<!-- SOUND -->
+
+<audio id="tickSound" src="tick.mp3"></audio>
+
+<script>
+
+/* ENABLE SOUND AFTER CLICK */
+
+document.addEventListener("click", function(){
+document.getElementById("tickSound").play();
+});
+
+/* TICK EVERY SECOND */
+
+setInterval(function(){
+var sound=document.getElementById("tickSound");
+sound.currentTime=0;
+sound.play();
+},1000);
+
+
+/* COUNTDOWN */
+
+var target=new Date("Feb 20, 2026 21:00:00").getTime();
+
+setInterval(function(){
+
+var now=new Date().getTime();
+var diff=target-now;
+
+if(diff<0){
+document.getElementById("clock").innerHTML="00:00:00:00:00";
+return;
+}
+var days=Math.floor((diff%(1000*60*60*24*30))/(1000*60*60*24));
+var hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+var minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+var seconds=Math.floor((diff%(1000*60))/1000);
+
+document.getElementById("clock").innerHTML=
+days+":"+hours+":"+minutes+":"+seconds;
+
+},1000);
+
+
+/* FIRE PARTICLES */
+
+var canvas=document.getElementById("particles");
+var ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+var particles=[];
+
+for(let i=0;i<150;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+size:Math.random()*3,
+speedY:Math.random()*2+0.5
+});
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="orange";
+
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+ctx.fill();
+
+p.y-=p.speedY;
+
+if(p.y<0){
+p.y=canvas.height;
+p.x=Math.random()*canvas.width;
+}
+});
+
+requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
